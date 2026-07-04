@@ -324,7 +324,13 @@
     };
 
     const firebaseApp = initializeApp(firebaseConfig);
-    getAnalytics(firebaseApp);
+    try {
+      if (typeof window !== "undefined") {
+        getAnalytics(firebaseApp);
+      }
+    } catch (err) {
+      console.warn("Analytics init skipped:", err);
+    }
     const db = getFirestore(firebaseApp);
 
     const KANJI_GAME_MOCK_CODE = `<!DOCTYPE html>
