@@ -1,630 +1,744 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduPlay - Nền tảng Học tập Tương tác</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        mono: ['Consolas', 'Monaco', 'monospace'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            500: '#6366f1', // Indigo 500
-                            600: '#4f46e5', // Indigo 600
-                            700: '#4338ca',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Custom Scrollbar for code editor */
-        textarea::-webkit-scrollbar { width: 8px; height: 8px; }
-        textarea::-webkit-scrollbar-track { background: #1e293b; border-radius: 4px; }
-        textarea::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-        textarea::-webkit-scrollbar-thumb:hover { background: #64748b; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduPlay - Nền tảng Học tập Tương tác</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            mono: ["Consolas", "Monaco", "monospace"],
+          },
+          colors: {
+            brand: {
+              50: "#eef2ff",
+              100: "#e0e7ff",
+              500: "#6366f1",
+              600: "#4f46e5",
+              700: "#4338ca",
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: "Inter", sans-serif;
+      background-color: #f8fafc;
+    }
+    .fade-in {
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    textarea::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    textarea::-webkit-scrollbar-track {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    textarea::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+    textarea::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+  </style>
 </head>
 <body class="text-slate-800 antialiased h-screen flex flex-col overflow-hidden">
-
-    <nav class="bg-white shadow-sm border-b border-slate-200 z-10 relative flex-shrink-0">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-3 cursor-pointer" onclick="app.switchMode('guest')">
-                    <div class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
-                        <i class="fa-solid fa-gamepad text-xl"></i>
-                    </div>
-                    <span class="font-bold text-xl tracking-tight text-slate-800">EduPlay</span>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    <span id="mode-label" class="text-sm font-medium text-slate-500 hidden sm:block">Chế độ Khách</span>
-                    <button onclick="app.toggleMode()" class="relative inline-flex h-8 w-16 items-center rounded-full bg-slate-200 transition-colors duration-300 focus:outline-none" id="mode-toggle-btn">
-                        <span class="sr-only">Toggle Mode</span>
-                        <span class="inline-block h-6 w-6 transform rounded-full bg-white transition duration-300 shadow translate-x-1" id="mode-toggle-dot">
-                            <i class="fa-solid fa-user text-xs text-slate-400 flex h-full items-center justify-center" id="mode-icon"></i>
-                        </span>
-                    </button>
-                </div>
-            </div>
+  <nav class="bg-white shadow-sm border-b border-slate-200 z-10 relative flex-shrink-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="app.switchMode('guest')">
+          <div
+            class="w-10 h-10 bg-brand-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-brand-500/30"
+          >
+            <i class="fa-solid fa-gamepad text-xl"></i>
+          </div>
+          <span class="font-bold text-xl tracking-tight text-slate-800">EduPlay</span>
         </div>
-    </nav>
 
-    <main class="flex-1 overflow-y-auto bg-slate-50 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full">
-            
-            <div id="guest-list-view" class="h-full hidden fade-in">
-                <div class="text-center mb-10 mt-4">
-                    <h1 class="text-3xl font-bold text-slate-800 mb-4">Khám phá Bài học</h1>
-                    <div class="max-w-xl mx-auto relative">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <i class="fa-solid fa-search text-slate-400"></i>
-                        </div>
-                        <input type="text" id="search-input" class="block w-full pl-11 pr-4 py-3 border border-slate-200 rounded-2xl leading-5 bg-white shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all text-base" placeholder="Tìm kiếm tên bài học, game..." oninput="app.filterLessons()">
-                    </div>
-                </div>
-                
-                <div id="guest-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12">
-                    </div>
-                
-                <div id="empty-state-guest" class="hidden text-center py-20">
-                    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4 text-slate-400 text-2xl">
-                        <i class="fa-solid fa-folder-open"></i>
-                    </div>
-                    <h3 class="text-lg font-medium text-slate-900">Không tìm thấy bài học nào</h3>
-                    <p class="mt-1 text-sm text-slate-500">Hãy thử tìm kiếm với từ khóa khác.</p>
-                </div>
-            </div>
-
-            <div id="guest-play-view" class="h-full flex flex-col hidden fade-in">
-                <div class="flex justify-between items-center mb-4 flex-shrink-0">
-                    <button onclick="app.closeLesson()" class="group flex items-center text-sm font-medium text-slate-500 hover:text-brand-600 transition-colors">
-                        <div class="w-8 h-8 rounded-full bg-slate-200 group-hover:bg-brand-100 flex items-center justify-center mr-2 transition-colors">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </div>
-                        Quay lại danh sách
-                    </button>
-                    <h2 id="play-title" class="text-lg font-bold text-slate-800 hidden sm:block"></h2>
-                    <div class="w-24"></div> </div>
-                <div class="flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative">
-                    <iframe id="play-iframe" class="w-full h-full border-0 absolute inset-0" sandbox="allow-scripts allow-same-origin"></iframe>
-                </div>
-            </div>
-
-            <div id="admin-dashboard-view" class="h-full hidden fade-in">
-                <div class="sm:flex sm:items-center sm:justify-between mb-8">
-                    <div>
-                        <h1 class="text-2xl font-bold text-slate-900">Quản lý Bài học</h1>
-                        <p class="mt-2 text-sm text-slate-600">Thêm, sửa, xóa các ứng dụng/game học tập của hệ thống.</p>
-                    </div>
-                    <div class="mt-4 sm:mt-0">
-                        <button onclick="app.openForm()" class="inline-flex items-center justify-center rounded-xl border border-transparent bg-brand-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-all">
-                            <i class="fa-solid fa-plus mr-2"></i> Thêm bài học mới
-                        </button>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-slate-200">
-                            <thead class="bg-slate-50">
-                                <tr>
-                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider sm:pl-6">Tên bài học</th>
-                                    <th scope="col" class="px-3 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider w-40">Ngày tạo</th>
-                                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 w-24">
-                                        <span class="sr-only">Hành động</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-table-body" class="divide-y divide-slate-200 bg-white">
-                                </tbody>
-                        </table>
-                    </div>
-                    <div id="empty-state-admin" class="hidden text-center py-16 border-t border-slate-200">
-                        <p class="text-sm text-slate-500">Chưa có bài học nào. Hãy tạo bài học đầu tiên!</p>
-                    </div>
-                </div>
-            </div>
-
-            <div id="admin-form-view" class="h-full flex flex-col hidden fade-in max-w-5xl mx-auto">
-                <div class="mb-6 flex-shrink-0">
-                    <h1 id="form-title" class="text-2xl font-bold text-slate-900">Thêm bài học mới</h1>
-                </div>
-                
-                <div class="bg-white shadow-sm border border-slate-200 rounded-2xl flex-1 flex flex-col overflow-hidden">
-                    <div class="p-6 flex-1 flex flex-col overflow-y-auto">
-                        <div class="mb-5">
-                            <label for="lesson-title" class="block text-sm font-medium text-slate-700 mb-1">Tên bài học</label>
-                            <input type="text" id="lesson-title" class="block w-full rounded-lg border-slate-300 border px-4 py-2.5 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm" placeholder="VD: Game Học Kanji N4...">
-                        </div>
-                        <div class="flex-1 flex flex-col">
-                            <div class="flex justify-between items-center mb-1">
-                                <label for="lesson-code" class="block text-sm font-medium text-slate-700">Mã nguồn HTML/JS/CSS</label>
-                                <span class="text-xs text-slate-400 font-mono">Dán toàn bộ code vào đây</span>
-                            </div>
-                            <textarea id="lesson-code" class="block w-full flex-1 rounded-lg border-slate-800 bg-[#1e293b] text-[#a7f3d0] font-mono text-sm px-4 py-3 shadow-inner focus:outline-none focus:ring-2 focus:ring-brand-500 resize-none whitespace-pre" placeholder="<!DOCTYPE html>&#10;<html>&#10;...&#10;</html>" spellcheck="false"></textarea>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-slate-50 px-6 py-4 flex items-center justify-between border-t border-slate-200 flex-shrink-0">
-                        <button type="button" onclick="app.previewCode()" class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors">
-                            <i class="fa-solid fa-play mr-2 text-brand-600"></i> Xem trước
-                        </button>
-                        
-                        <div class="flex gap-3">
-                            <button type="button" onclick="app.switchView('admin-dashboard')" class="inline-flex items-center rounded-lg border border-transparent bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-500 transition-colors">
-                                Hủy
-                            </button>
-                            <button type="button" onclick="app.saveLesson()" class="inline-flex items-center rounded-lg border border-transparent bg-brand-600 px-5 py-2 text-sm font-medium text-white shadow-sm hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-colors">
-                                <i class="fa-solid fa-floppy-disk mr-2"></i> Lưu bài học
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+        <div class="flex items-center gap-4">
+          <span id="mode-label" class="text-sm font-medium text-slate-500 hidden sm:block">Chế độ Khách</span>
+          <button
+            onclick="app.toggleMode()"
+            class="relative inline-flex h-8 w-16 items-center rounded-full bg-slate-200 transition-colors duration-300 focus:outline-none"
+            id="mode-toggle-btn"
+          >
+            <span class="sr-only">Toggle Mode</span>
+            <span
+              class="inline-block h-6 w-6 transform rounded-full bg-white transition duration-300 shadow translate-x-1"
+              id="mode-toggle-dot"
+            >
+              <i
+                class="fa-solid fa-user text-xs text-slate-400 flex h-full items-center justify-center"
+                id="mode-icon"
+              ></i>
+            </span>
+          </button>
         </div>
-    </main>
-
-    <div id="preview-modal" class="relative z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
-        <div class="fixed inset-0 z-10 overflow-y-auto">
-            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-                <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-5xl h-[85vh] flex flex-col fade-in">
-                    <div class="bg-slate-800 px-4 py-3 flex justify-between items-center flex-shrink-0">
-                        <h3 class="text-base font-semibold leading-6 text-white" id="modal-title"><i class="fa-solid fa-eye mr-2"></i>Xem trước Giao diện</h3>
-                        <button type="button" onclick="app.closePreview()" class="rounded-md bg-slate-800 text-slate-400 hover:text-white focus:outline-none">
-                            <span class="sr-only">Close</span>
-                            <i class="fa-solid fa-xmark text-xl"></i>
-                        </button>
-                    </div>
-                    <div class="flex-1 bg-slate-100 p-0 relative">
-                        <iframe id="preview-iframe" class="w-full h-full border-0 absolute inset-0" sandbox="allow-scripts allow-same-origin"></iframe>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+  </nav>
 
-    <script>
-        // MOCK DATA: Game Kanji N4 - 22 câu, cấu trúc hiển thị độc lập từng câu hỏi (single-question entry)
-        const KANJI_GAME_MOCK_CODE = `<!DOCTYPE html>
+  <main class="flex-1 overflow-y-auto bg-slate-50 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-full">
+      <!-- GUEST LIST VIEW -->
+      <div id="guest-list-view" class="h-full hidden fade-in">
+        <div class="text-center mb-10 mt-4">
+          <h1 class="text-3xl font-bold text-slate-800 mb-4">Khám phá Bài học</h1>
+          <div class="max-w-xl mx-auto relative">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <i class="fa-solid fa-search text-slate-400"></i>
+            </div>
+            <input
+              type="text"
+              id="search-input"
+              oninput="app.filterLessons()"
+              class="block w-full pl-11 pr-4 py-3 border border-slate-200 rounded-2xl leading-5 bg-white shadow-sm placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
+              placeholder="Tìm kiếm bài học..."
+            />
+          </div>
+        </div>
+
+        <div id="guest-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-12"></div>
+
+        <div id="empty-state-guest" class="hidden text-center py-20">
+          <div
+            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-slate-100 mb-4 text-slate-400 text-2xl"
+          >
+            <i class="fa-solid fa-folder-open"></i>
+          </div>
+          <h3 class="text-lg font-medium text-slate-900">Không tìm thấy bài học nào</h3>
+          <p class="mt-1 text-sm text-slate-500">Hãy thử tìm kiếm với từ khóa khác.</p>
+        </div>
+      </div>
+
+      <!-- GUEST PLAY VIEW -->
+      <div id="guest-play-view" class="h-full flex flex-col hidden fade-in">
+        <div class="flex justify-between items-center mb-4 flex-shrink-0">
+          <button
+            onclick="app.closeLesson()"
+            class="group flex items-center text-sm font-medium text-slate-500 hover:text-brand-600 transition-colors"
+          >
+            <div
+              class="w-8 h-8 rounded-full bg-slate-200 group-hover:bg-brand-100 flex items-center justify-center mr-2 transition-colors"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+            </div>
+            Quay lại danh sách
+          </button>
+          <h2 id="play-title" class="text-lg font-bold text-slate-800 hidden sm:block"></h2>
+          <div class="w-24"></div>
+        </div>
+        <div class="flex-1 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden relative">
+          <iframe id="play-iframe" class="w-full h-full border-0 absolute inset-0" sandbox="allow-scripts allow-same-origin"></iframe>
+        </div>
+      </div>
+
+      <!-- ADMIN DASHBOARD VIEW -->
+      <div id="admin-dashboard-view" class="h-full hidden fade-in">
+        <div class="sm:flex sm:items-center sm:justify-between mb-8">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Quản lý Bài học</h1>
+            <p class="mt-2 text-sm text-slate-600">Thêm, sửa, xóa các ứng dụng/game học tập của hệ thống.</p>
+          </div>
+          <div class="mt-4 sm:mt-0">
+            <button
+              onclick="app.openForm()"
+              class="inline-flex items-center justify-center rounded-xl border border-transparent bg-brand-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-brand-700"
+            >
+              <i class="fa-solid fa-plus mr-2"></i> Thêm bài học mới
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th
+                    scope="col"
+                    class="py-3.5 pl-4 pr-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider sm:pl-6"
+                  >
+                    Tên bài học
+                  </th>
+                  <th scope="col" class="px-3 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider w-40">
+                    Ngày tạo
+                  </th>
+                  <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6 w-24">
+                    <span class="sr-only">Hành động</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="admin-table-body" class="divide-y divide-slate-200 bg-white"></tbody>
+            </table>
+          </div>
+          <div id="empty-state-admin" class="hidden text-center py-16 border-t border-slate-200">
+            <p class="text-sm text-slate-500">Chưa có bài học nào. Hãy tạo bài học đầu tiên!</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADMIN FORM VIEW -->
+      <div id="admin-form-view" class="h-full flex flex-col hidden fade-in max-w-5xl mx-auto">
+        <div class="mb-6 flex-shrink-0">
+          <h1 id="form-title" class="text-2xl font-bold text-slate-900">Thêm bài học mới</h1>
+        </div>
+
+        <div class="bg-white shadow-sm border border-slate-200 rounded-2xl flex-1 flex flex-col overflow-hidden">
+          <div class="p-6 flex-1 flex flex-col overflow-y-auto">
+            <div class="mb-5">
+              <label for="lesson-title" class="block text-sm font-medium text-slate-700 mb-1">Tên bài học</label>
+              <input
+                type="text"
+                id="lesson-title"
+                class="block w-full rounded-lg border-slate-300 border px-4 py-2.5 shadow-sm focus:border-brand-500 focus:ring-brand-500 text-sm"
+                placeholder="Ví dụ: Trò chơi Toán lớp 3"
+              />
+            </div>
+            <div class="flex-1 flex flex-col">
+              <div class="flex justify-between items-center mb-1">
+                <label for="lesson-code" class="block text-sm font-medium text-slate-700">Mã nguồn HTML/JS/CSS</label>
+                <span class="text-xs text-slate-400 font-mono">Dán toàn bộ code vào đây</span>
+              </div>
+              <textarea
+                id="lesson-code"
+                class="block w-full flex-1 rounded-lg border-slate-800 bg-[#1e293b] text-[#a7f3d0] font-mono text-sm px-4 py-3 shadow-inner focus:outline-none"
+                placeholder="<!DOCTYPE html>..."
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 px-6 py-4 flex items-center justify-between border-t border-slate-200 flex-shrink-0">
+            <button
+              type="button"
+              onclick="app.previewCode()"
+              class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50"
+            >
+              <i class="fa-solid fa-play mr-2 text-brand-600"></i> Xem trước
+            </button>
+
+            <div class="flex gap-3">
+              <button
+                type="button"
+                onclick="app.switchView('admin-dashboard')"
+                class="inline-flex items-center rounded-lg border border-transparent bg-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onclick="app.saveLesson()"
+                class="inline-flex items-center rounded-lg border border-transparent bg-brand-600 px-5 py-2 text-sm font-medium text-white hover:bg-brand-700"
+              >
+                <i class="fa-solid fa-floppy-disk mr-2"></i> Lưu bài học
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- PREVIEW MODAL -->
+  <div id="preview-modal" class="relative z-50 hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-slate-900 bg-opacity-75 transition-opacity backdrop-blur-sm"></div>
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div
+          class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-5xl h-[85vh] flex flex-col fade-in"
+        >
+          <div class="bg-slate-800 px-4 py-3 flex justify-between items-center flex-shrink-0">
+            <h3 class="text-base font-semibold leading-6 text-white" id="modal-title">
+              <i class="fa-solid fa-eye mr-2"></i>Xem trước Giao diện
+            </h3>
+            <button type="button" onclick="app.closePreview()" class="rounded-md bg-slate-800 text-slate-400 hover:text-white focus:outline-none">
+              <span class="sr-only">Close</span>
+              <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+          <div class="flex-1 bg-slate-100 p-0 relative">
+            <iframe id="preview-iframe" class="w-full h-full border-0 absolute inset-0" sandbox="allow-scripts allow-same-origin"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APP SCRIPT (module) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-analytics.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      doc,
+      query,
+      orderBy,
+      serverTimestamp,
+    } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBaDQzoD1-54gUNlM8sDiYIcSOEYSjTzk",
+      authDomain: "web-hoc-tap-ead82.firebaseapp.com",
+      projectId: "web-hoc-tap-ead82",
+      storageBucket: "web-hoc-tap-ead82.firebasestorage.app",
+      messagingSenderId: "1073106603330",
+      appId: "1:1073106603330:web:06dc542ec0e89f627a8cdb",
+      measurementId: "G-B2PP67GMJX",
+    };
+
+    const firebaseApp = initializeApp(firebaseConfig);
+    getAnalytics(firebaseApp);
+    const db = getFirestore(firebaseApp);
+
+    const KANJI_GAME_MOCK_CODE = `<!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <script src="https://cdn.tailwindcss.com"><\/script>
-    <style>
-        body { font-family: sans-serif; background-color: #f0fdf4; margin:0; padding:0; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .card-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
-    </style>
+  <meta charset="UTF-8">
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <style>
+    body { font-family: sans-serif; background-color: #f0fdf4; margin:0; padding:0; height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .card-anim { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); } }
+  </style>
 </head>
 <body>
-    <div id="game-container" class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md text-center border-4 border-green-100 relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-2 bg-slate-100"><div id="progress-bar" class="h-full bg-green-500 transition-all duration-300" style="width: 0%"></div></div>
-        <h2 class="text-green-600 font-bold text-sm tracking-wider uppercase mb-1 mt-2">Học Kanji N4</h2>
-        <h1 class="text-2xl font-extrabold text-slate-800 mb-6">Chủ đề: Gia đình</h1>
-        
-        <div id="start-screen">
-            <p class="text-slate-600 mb-8">Bạn có 22 câu hỏi trắc nghiệm Kanji chủ đề Gia Đình. Mỗi màn hình chỉ hiển thị 1 câu hỏi để tập trung tối đa.</p>
-            <button onclick="startGame()" class="w-full py-4 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold text-lg shadow-lg shadow-green-200 transition-all transform hover:-translate-y-1">BẮT ĐẦU NGAY</button>
-        </div>
+  <div id="game-container" class="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md text-center border-4 border-green-100 relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-2 bg-slate-100"><div id="progress-bar" class="h-full bg-green-500 transition-all duration-300" style="width: 0%"></div></div>
+    <h2 class="text-green-600 font-bold text-sm tracking-wider uppercase mb-1 mt-2">Học Kanji N4</h2>
+    <h1 class="text-2xl font-extrabold text-slate-800 mb-6">Chủ đề: Gia đình</h1>
 
-        <div id="quiz-screen" class="hidden">
-            <div class="text-sm font-semibold text-slate-400 mb-2">Câu <span id="q-current">1</span> / <span id="q-total">22</span></div>
-            <div class="bg-green-50 rounded-2xl p-8 mb-6 card-anim" id="kanji-display-container">
-                <div id="kanji-display" class="text-7xl font-bold text-slate-800"></div>
-            </div>
-            <div id="answers" class="grid grid-cols-2 gap-3"></div>
-        </div>
-
-        <div id="result-screen" class="hidden card-anim">
-            <div class="text-6xl mb-4">🏆</div>
-            <h2 class="text-2xl font-bold text-slate-800 mb-2">Hoàn thành xuất sắc!</h2>
-            <p class="text-slate-600 mb-6">Điểm số của bạn: <span id="score" class="font-bold text-green-600 text-xl"></span>/22</p>
-            <button onclick="resetGame()" class="py-3 px-6 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold shadow-lg transition-all">Chơi lại từ đầu</button>
-        </div>
+    <div id="start-screen">
+      <p class="text-slate-600 mb-8">Bạn có 22 câu hỏi trắc nghiệm Kanji chủ đề Gia Đình.</p>
+      <button onclick="startGame()" class="w-full py-4 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold text-lg">Bắt đầu</button>
     </div>
 
-    <script>
-        const questions = [
-            { k: '家族', a: 'Gia đình', w: ['Bố mẹ', 'Anh em', 'Họ hàng'] },
-            { k: '父', a: 'Bố', w: ['Mẹ', 'Ông', 'Chú'] },
-            { k: '母', a: 'Mẹ', w: ['Bà', 'Cô', 'Chị'] },
-            { k: '兄', a: 'Anh trai', w: ['Em trai', 'Chú', 'Anh họ'] },
-            { k: '弟', a: 'Em trai', w: ['Anh trai', 'Cháu trai', 'Con trai'] },
-            { k: '姉', a: 'Chị gái', w: ['Em gái', 'Cô', 'Dì'] },
-            { k: '妹', a: 'Em gái', w: ['Chị gái', 'Cháu gái', 'Con gái'] },
-            { k: '兄弟', a: 'Anh em', w: ['Chị em', 'Bố mẹ', 'Ông bà'] },
-            { k: '姉妹', a: 'Chị em', w: ['Anh em', 'Vợ chồng', 'Họ hàng'] },
-            { k: '祖父', a: 'Ông', w: ['Bà', 'Bố', 'Bác trai'] },
-            { k: '祖母', a: 'Bà', w: ['Ông', 'Mẹ', 'Bác gái'] },
-            { k: '叔父', a: 'Chú/Bác trai', w: ['Cô/Dì', 'Anh họ', 'Anh trai'] },
-            { k: '叔母', a: 'Cô/Dì', w: ['Chú/Bác', 'Chị họ', 'Chị gái'] },
-            { k: '従兄弟', a: 'Anh em họ', w: ['Anh em ruột', 'Bạn bè', 'Đồng nghiệp'] },
-            { k: '甥', a: 'Cháu trai', w: ['Cháu gái', 'Con trai', 'Em trai'] },
-            { k: '姪', a: 'Cháu gái', w: ['Cháu trai', 'Con gái', 'Em gái'] },
-            { k: '夫', a: 'Chồng', w: ['Vợ', 'Bố', 'Anh trai'] },
-            { k: '妻', a: 'Vợ', w: ['Chồng', 'Mẹ', 'Chị gái'] },
-            { k: '両親', a: 'Bố mẹ', w: ['Ông bà', 'Anh em', 'Vợ chồng'] },
-            { k: '息子', a: 'Con trai', w: ['Con gái', 'Cháu trai', 'Em trai'] },
-            { k: '娘', a: 'Con gái', w: ['Con trai', 'Cháu gái', 'Em gái'] },
-            { k: '子供', a: 'Trẻ con/Con cái', w: ['Người lớn', 'Thanh niên', 'Học sinh'] }
-        ];
+    <div id="quiz-screen" class="hidden">
+      <div class="text-sm font-semibold text-slate-400 mb-2">Câu <span id="q-current">1</span> / <span id="q-total">22</span></div>
+      <div class="bg-green-50 rounded-2xl p-8 mb-6 card-anim" id="kanji-display-container">
+        <div id="kanji-display" class="text-7xl font-bold text-slate-800"></div>
+      </div>
+      <div id="answers" class="grid grid-cols-2 gap-3"></div>
+    </div>
 
-        let currentIndex = 0;
-        let score = 0;
+    <div id="result-screen" class="hidden card-anim">
+      <div class="text-6xl mb-4">🏆</div>
+      <h2 class="text-2xl font-bold text-slate-800 mb-2">Hoàn thành xuất sắc!</h2>
+      <p class="text-slate-600 mb-6">Điểm số của bạn: <span id="score" class="font-bold text-green-600 text-xl"></span>/22</p>
+      <button onclick="resetGame()" class="py-3 px-6 rounded-xl bg-slate-800 hover:bg-slate-900 text-white font-bold">Chơi lại</button>
+    </div>
+  </div>
 
-        function startGame() {
-            document.getElementById('start-screen').classList.add('hidden');
-            document.getElementById('quiz-screen').classList.remove('hidden');
-            document.getElementById('q-total').innerText = questions.length;
-            currentIndex = 0; score = 0;
-            loadQuestion();
-        }
+  <script>
+    const questions = [
+      { k: '家族', a: 'Gia đình', w: ['Bố mẹ', 'Anh em', 'Họ hàng'] },
+      { k: '父', a: 'Bố', w: ['Mẹ', 'Ông', 'Chú'] },
+      { k: '母', a: 'Mẹ', w: ['Bà', 'Cô', 'Chị'] },
+      { k: '兄', a: 'Anh trai', w: ['Em trai', 'Chú', 'Anh họ'] },
+      { k: '弟', a: 'Em trai', w: ['Anh trai', 'Cháu trai', 'Con trai'] },
+      { k: '姉', a: 'Chị gái', w: ['Em gái', 'Cô', 'Dì'] },
+      { k: '妹', a: 'Em gái', w: ['Chị gái', 'Cháu gái', 'Con gái'] },
+      { k: '兄弟', a: 'Anh em', w: ['Chị em', 'Bố mẹ', 'Ông bà'] },
+      { k: '姉妹', a: 'Chị em', w: ['Anh em', 'Vợ chồng', 'Họ hàng'] },
+      { k: '祖父', a: 'Ông', w: ['Bà', 'Bố', 'Bác trai'] },
+      { k: '祖母', a: 'Bà', w: ['Ông', 'Mẹ', 'Bác gái'] },
+      { k: '叔父', a: 'Chú/Bác trai', w: ['Cô/Dì', 'Anh họ', 'Anh trai'] },
+      { k: '叔母', a: 'Cô/Dì', w: ['Chú/Bác', 'Chị họ', 'Chị gái'] },
+      { k: '従兄弟', a: 'Anh em họ', w: ['Anh em ruột', 'Bạn bè', 'Đồng nghiệp'] },
+      { k: '甥', a: 'Cháu trai', w: ['Cháu gái', 'Con trai', 'Em trai'] },
+      { k: '姪', a: 'Cháu gái', w: ['Cháu trai', 'Con gái', 'Em gái'] },
+      { k: '夫', a: 'Chồng', w: ['Vợ', 'Bố', 'Anh trai'] },
+      { k: '妻', a: 'Vợ', w: ['Chồng', 'Mẹ', 'Chị gái'] },
+      { k: '両親', a: 'Bố mẹ', w: ['Ông bà', 'Anh em', 'Vợ chồng'] },
+      { k: '息子', a: 'Con trai', w: ['Con gái', 'Cháu trai', 'Em trai'] },
+      { k: '娘', a: 'Con gái', w: ['Con trai', 'Cháu gái', 'Em gái'] },
+      { k: '子供', a: 'Trẻ con/Con cái', w: ['Người lớn', 'Thanh niên', 'Học sinh'] }
+    ];
 
-        function loadQuestion() {
-            const q = questions[currentIndex];
-            document.getElementById('q-current').innerText = currentIndex + 1;
-            
-            const displayCont = document.getElementById('kanji-display-container');
-            displayCont.classList.remove('card-anim');
-            void displayCont.offsetWidth; // trigger reflow
-            displayCont.classList.add('card-anim');
-            
-            document.getElementById('kanji-display').innerText = q.k;
-            document.getElementById('progress-bar').style.width = ((currentIndex) / questions.length * 100) + '%';
+    let currentIndex = 0;
+    let score = 0;
 
-            let options = [q.a, ...q.w].sort(() => Math.random() - 0.5);
-            const ansDiv = document.getElementById('answers');
-            ansDiv.innerHTML = '';
-            
-            options.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = 'p-4 rounded-xl border-2 border-slate-100 bg-white hover:border-green-400 hover:bg-green-50 font-semibold text-slate-700 transition-all';
-                btn.innerText = opt;
-                btn.onclick = () => checkAnswer(opt === q.a);
-                ansDiv.appendChild(btn);
-            });
-        }
+    function startGame() {
+      document.getElementById('start-screen').classList.add('hidden');
+      document.getElementById('quiz-screen').classList.remove('hidden');
+      document.getElementById('q-total').innerText = questions.length;
+      currentIndex = 0; score = 0;
+      loadQuestion();
+    }
 
-        function checkAnswer(isCorrect) {
-            if(isCorrect) score++;
-            currentIndex++;
-            if(currentIndex >= questions.length) {
-                endGame();
-            } else {
-                loadQuestion();
-            }
-        }
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      document.getElementById('q-current').innerText = currentIndex + 1;
+      const displayCont = document.getElementById('kanji-display-container');
+      displayCont.classList.remove('card-anim');
+      void displayCont.offsetWidth;
+      displayCont.classList.add('card-anim');
+      document.getElementById('kanji-display').innerText = q.k;
+      document.getElementById('progress-bar').style.width = ((currentIndex) / questions.length * 100) + '%';
 
-        function endGame() {
-            document.getElementById('quiz-screen').classList.add('hidden');
-            document.getElementById('result-screen').classList.remove('hidden');
-            document.getElementById('score').innerText = score;
-            document.getElementById('progress-bar').style.width = '100%';
-        }
+      let options = [q.a, ...q.w].sort(() => Math.random() - 0.5);
+      const ansDiv = document.getElementById('answers');
+      ansDiv.innerHTML = '';
 
-        function resetGame() {
-            document.getElementById('result-screen').classList.add('hidden');
-            startGame();
-        }
-    <\/script>
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'p-4 rounded-xl border-2 border-slate-100 bg-white hover:border-green-400 hover:bg-green-50 font-semibold text-slate-700 transition-all';
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(opt === q.a);
+        ansDiv.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(isCorrect) {
+      if (isCorrect) score++;
+      currentIndex++;
+      if (currentIndex >= questions.length) endGame();
+      else loadQuestion();
+    }
+
+    function endGame() {
+      document.getElementById('quiz-screen').classList.add('hidden');
+      document.getElementById('result-screen').classList.remove('hidden');
+      document.getElementById('score').innerText = score;
+      document.getElementById('progress-bar').style.width = '100%';
+    }
+
+    function resetGame() {
+      document.getElementById('result-screen').classList.add('hidden');
+      startGame();
+    }
+  <\/script>
 </body>
 </html>`;
 
-        const AppLogic = {
-            STORAGE_KEY: 'eduplay_lessons',
-            state: {
-                mode: 'guest', // 'guest' | 'admin'
-                view: 'guest-list', // 'guest-list' | 'guest-play' | 'admin-dashboard' | 'admin-form'
-                lessons: [],
-                editingId: null
-            },
+    const AppLogic = {
+      state: {
+        mode: "guest",
+        view: "guest-list",
+        lessons: [],
+        editingId: null,
+      },
 
-            init() {
-                this.loadData();
-                this.renderUI();
-            },
+      async init() {
+        await this.loadData();
+        this.renderUI();
+      },
 
-            loadData() {
-                const data = localStorage.getItem(this.STORAGE_KEY);
-                if (data) {
-                    this.state.lessons = JSON.parse(data);
-                } else {
-                    // Seed Mock Data
-                    const mockLesson = {
-                        id: Date.now().toString(),
-                        title: "Game Học Kanji N4 - Chủ đề Gia Đình",
-                        source_code: KANJI_GAME_MOCK_CODE,
-                        created_at: new Date().toISOString()
-                    };
-                    this.state.lessons = [mockLesson];
-                    this.saveData();
-                }
-            },
+      async loadData() {
+        try {
+          const qRef = query(collection(db, "lessons"), orderBy("created_at", "desc"));
+          const snap = await getDocs(qRef);
 
-            saveData() {
-                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(this.state.lessons));
-            },
+          this.state.lessons = snap.docs.map((d) => {
+            const data = d.data();
+            return {
+              id: d.id,
+              title: data.title || "",
+              source_code: data.source_code || "",
+              created_at: data.created_at?.toDate?.().toISOString?.() || new Date().toISOString(),
+            };
+          });
 
-            // --- NAVIGATION & STATE MANGEMENT ---
+          if (this.state.lessons.length === 0) {
+            await this.seedMockLesson();
+            await this.loadData();
+          }
+        } catch (e) {
+          console.error(e);
+          alert("Không tải được dữ liệu từ Firestore. Kiểm tra Rules / firebaseConfig.");
+          this.state.lessons = [];
+        }
+      },
 
-            toggleMode() {
-                const newMode = this.state.mode === 'guest' ? 'admin' : 'guest';
-                this.switchMode(newMode);
-            },
-
-            switchMode(mode) {
-                this.state.mode = mode;
-                
-                // Update Toggle UI
-                const toggleBtn = document.getElementById('mode-toggle-btn');
-                const toggleDot = document.getElementById('mode-toggle-dot');
-                const modeIcon = document.getElementById('mode-icon');
-                const modeLabel = document.getElementById('mode-label');
-
-                if (mode === 'admin') {
-                    toggleBtn.classList.replace('bg-slate-200', 'bg-brand-600');
-                    toggleDot.classList.replace('translate-x-1', 'translate-x-9');
-                    modeIcon.className = 'fa-solid fa-shield text-xs text-brand-600 flex h-full items-center justify-center';
-                    modeLabel.innerText = 'Chế độ Admin';
-                    this.switchView('admin-dashboard');
-                } else {
-                    toggleBtn.classList.replace('bg-brand-600', 'bg-slate-200');
-                    toggleDot.classList.replace('translate-x-9', 'translate-x-1');
-                    modeIcon.className = 'fa-solid fa-user text-xs text-slate-400 flex h-full items-center justify-center';
-                    modeLabel.innerText = 'Chế độ Khách';
-                    this.switchView('guest-list');
-                }
-            },
-
-            switchView(viewName) {
-                this.state.view = viewName;
-                
-                // Hide all views
-                document.getElementById('guest-list-view').classList.add('hidden');
-                document.getElementById('guest-play-view').classList.add('hidden');
-                document.getElementById('admin-dashboard-view').classList.add('hidden');
-                document.getElementById('admin-form-view').classList.add('hidden');
-
-                // Show selected view & execute specific logic
-                document.getElementById(`${viewName}-view`).classList.remove('hidden');
-
-                if (viewName === 'guest-list') {
-                    document.getElementById('search-input').value = '';
-                    this.renderGuestList();
-                } else if (viewName === 'admin-dashboard') {
-                    this.renderAdminDashboard();
-                }
-            },
-
-            formatDate(isoString) {
-                const date = new Date(isoString);
-                return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
-            },
-
-            // --- GUEST FEATURES ---
-
-            renderGuestList(filterQuery = '') {
-                const grid = document.getElementById('guest-grid');
-                const emptyState = document.getElementById('empty-state-guest');
-                
-                const filtered = this.state.lessons.filter(l => 
-                    l.title.toLowerCase().includes(filterQuery.toLowerCase())
-                );
-
-                grid.innerHTML = '';
-                
-                if (filtered.length === 0) {
-                    emptyState.classList.remove('hidden');
-                } else {
-                    emptyState.classList.add('hidden');
-                    
-                    filtered.forEach(lesson => {
-                        const card = document.createElement('div');
-                        card.className = 'bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group cursor-pointer';
-                        card.onclick = () => this.openLesson(lesson.id);
-                        
-                        card.innerHTML = `
-                            <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-xl mb-4 group-hover:bg-brand-600 group-hover:text-white transition-colors">
-                                <i class="fa-solid fa-laptop-code"></i>
-                            </div>
-                            <h3 class="text-lg font-bold text-slate-800 mb-2 line-clamp-2 flex-1">${lesson.title}</h3>
-                            <div class="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
-                                <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-calendar mr-1"></i> ${this.formatDate(lesson.created_at)}</span>
-                                <span class="text-sm font-semibold text-brand-600 group-hover:text-brand-700">Vào học ngay <i class="fa-solid fa-arrow-right ml-1 text-xs"></i></span>
-                            </div>
-                        `;
-                        grid.appendChild(card);
-                    });
-                }
-            },
-
-            filterLessons() {
-                const query = document.getElementById('search-input').value;
-                this.renderGuestList(query);
-            },
-
-            openLesson(id) {
-                const lesson = this.state.lessons.find(l => l.id === id);
-                if (!lesson) return;
-
-                document.getElementById('play-title').innerText = lesson.title;
-                const iframe = document.getElementById('play-iframe');
-                
-                // Set srcdoc carefully
-                iframe.srcdoc = lesson.source_code;
-                
-                this.switchView('guest-play');
-            },
-
-            closeLesson() {
-                document.getElementById('play-iframe').srcdoc = ''; // Clear iframe
-                this.switchView('guest-list');
-            },
-
-            // --- ADMIN FEATURES ---
-
-            renderAdminDashboard() {
-                const tbody = document.getElementById('admin-table-body');
-                const emptyState = document.getElementById('empty-state-admin');
-                
-                tbody.innerHTML = '';
-                
-                // Sort by newest first
-                const sortedLessons = [...this.state.lessons].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
-                if (sortedLessons.length === 0) {
-                    emptyState.classList.remove('hidden');
-                } else {
-                    emptyState.classList.add('hidden');
-                    
-                    sortedLessons.forEach(lesson => {
-                        const tr = document.createElement('tr');
-                        tr.className = 'hover:bg-slate-50 transition-colors';
-                        tr.innerHTML = `
-                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">
-                                <div class="flex items-center">
-                                    <div class="h-8 w-8 flex-shrink-0 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 mr-3">
-                                        <i class="fa-solid fa-file-code"></i>
-                                    </div>
-                                    <span class="truncate max-w-[200px] sm:max-w-xs md:max-w-md">${lesson.title}</span>
-                                </div>
-                            </td>
-                            <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">${this.formatDate(lesson.created_at)}</td>
-                            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-                                <div class="flex justify-end gap-2">
-                                    <button onclick="app.openForm('${lesson.id}')" class="text-slate-400 hover:text-brand-600 bg-slate-100 hover:bg-brand-50 w-8 h-8 rounded-lg flex items-center justify-center transition-colors" title="Sửa">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </button>
-                                    <button onclick="app.deleteLesson('${lesson.id}')" class="text-slate-400 hover:text-red-600 bg-slate-100 hover:bg-red-50 w-8 h-8 rounded-lg flex items-center justify-center transition-colors" title="Xóa">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                }
-            },
-
-            openForm(id = null) {
-                this.state.editingId = id;
-                const titleInput = document.getElementById('lesson-title');
-                const codeInput = document.getElementById('lesson-code');
-                const formTitle = document.getElementById('form-title');
-
-                if (id) {
-                    const lesson = this.state.lessons.find(l => l.id === id);
-                    formTitle.innerText = "Cập nhật bài học";
-                    titleInput.value = lesson.title;
-                    codeInput.value = lesson.source_code;
-                } else {
-                    formTitle.innerText = "Thêm bài học mới";
-                    titleInput.value = '';
-                    codeInput.value = '';
-                }
-
-                this.switchView('admin-form');
-            },
-
-            saveLesson() {
-                const title = document.getElementById('lesson-title').value.trim();
-                const code = document.getElementById('lesson-code').value.trim();
-
-                if (!title || !code) {
-                    alert('Vui lòng nhập đầy đủ Tên bài học và Mã nguồn!');
-                    return;
-                }
-
-                if (this.state.editingId) {
-                    // Update
-                    const index = this.state.lessons.findIndex(l => l.id === this.state.editingId);
-                    if (index !== -1) {
-                        this.state.lessons[index].title = title;
-                        this.state.lessons[index].source_code = code;
-                    }
-                } else {
-                    // Create
-                    const newLesson = {
-                        id: Date.now().toString(),
-                        title: title,
-                        source_code: code,
-                        created_at: new Date().toISOString()
-                    };
-                    this.state.lessons.push(newLesson);
-                }
-
-                this.saveData();
-                this.switchView('admin-dashboard');
-            },
-
-            deleteLesson(id) {
-                if (confirm('Bạn có chắc chắn muốn xóa bài học này không? Dữ liệu không thể khôi phục.')) {
-                    this.state.lessons = this.state.lessons.filter(l => l.id !== id);
-                    this.saveData();
-                    this.renderAdminDashboard();
-                }
-            },
-
-            previewCode() {
-                const code = document.getElementById('lesson-code').value;
-                if (!code.trim()) {
-                    alert('Chưa có mã nguồn để xem trước!');
-                    return;
-                }
-                
-                const modal = document.getElementById('preview-modal');
-                const iframe = document.getElementById('preview-iframe');
-                
-                iframe.srcdoc = code;
-                modal.classList.remove('hidden');
-            },
-
-            closePreview() {
-                const modal = document.getElementById('preview-modal');
-                const iframe = document.getElementById('preview-iframe');
-                
-                iframe.srcdoc = '';
-                modal.classList.add('hidden');
-            },
-
-            renderUI() {
-                // Initialize default view
-                this.switchMode('guest');
-            }
-        };
-
-        // Initialize App on Load
-        document.addEventListener('DOMContentLoaded', () => {
-            window.app = AppLogic; // Attach to window for onclick handlers
-            app.init();
+      async seedMockLesson() {
+        await addDoc(collection(db, "lessons"), {
+          title: "Game Học Kanji N4 - Chủ đề Gia Đình",
+          source_code: KANJI_GAME_MOCK_CODE,
+          created_at: serverTimestamp(),
         });
+      },
 
-    </script>
+      toggleMode() {
+        const newMode = this.state.mode === "guest" ? "admin" : "guest";
+        this.switchMode(newMode);
+      },
+
+      switchMode(mode) {
+        this.state.mode = mode;
+
+        const toggleBtn = document.getElementById("mode-toggle-btn");
+        const toggleDot = document.getElementById("mode-toggle-dot");
+        const modeIcon = document.getElementById("mode-icon");
+        const modeLabel = document.getElementById("mode-label");
+
+        if (mode === "admin") {
+          toggleBtn.classList.replace("bg-slate-200", "bg-brand-600");
+          toggleDot.classList.replace("translate-x-1", "translate-x-9");
+          modeIcon.className = "fa-solid fa-shield text-xs text-brand-600 flex h-full items-center justify-center";
+          modeLabel.innerText = "Chế độ Admin";
+          this.switchView("admin-dashboard");
+        } else {
+          toggleBtn.classList.replace("bg-brand-600", "bg-slate-200");
+          toggleDot.classList.replace("translate-x-9", "translate-x-1");
+          modeIcon.className = "fa-solid fa-user text-xs text-slate-400 flex h-full items-center justify-center";
+          modeLabel.innerText = "Chế độ Khách";
+          this.switchView("guest-list");
+        }
+      },
+
+      switchView(viewName) {
+        this.state.view = viewName;
+
+        document.getElementById("guest-list-view").classList.add("hidden");
+        document.getElementById("guest-play-view").classList.add("hidden");
+        document.getElementById("admin-dashboard-view").classList.add("hidden");
+        document.getElementById("admin-form-view").classList.add("hidden");
+
+        document.getElementById(`${viewName}-view`).classList.remove("hidden");
+
+        if (viewName === "guest-list") {
+          document.getElementById("search-input").value = "";
+          this.renderGuestList();
+        } else if (viewName === "admin-dashboard") {
+          this.renderAdminDashboard();
+        }
+      },
+
+      formatDate(isoString) {
+        const date = new Date(isoString);
+        return date.toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" });
+      },
+
+      renderGuestList(filterQuery = "") {
+        const grid = document.getElementById("guest-grid");
+        const emptyState = document.getElementById("empty-state-guest");
+
+        const filtered = this.state.lessons.filter((l) =>
+          (l.title || "").toLowerCase().includes(filterQuery.toLowerCase())
+        );
+
+        grid.innerHTML = "";
+
+        if (filtered.length === 0) {
+          emptyState.classList.remove("hidden");
+        } else {
+          emptyState.classList.add("hidden");
+
+          filtered.forEach((lesson) => {
+            const card = document.createElement("div");
+            card.className =
+              "bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group cursor-pointer";
+            card.onclick = () => this.openLesson(lesson.id);
+
+            card.innerHTML = `
+              <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center text-xl mb-4 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                <i class="fa-solid fa-laptop-code"></i>
+              </div>
+              <h3 class="text-lg font-bold text-slate-800 mb-2 line-clamp-2 flex-1">${lesson.title}</h3>
+              <div class="flex items-center justify-between mt-4 pt-4 border-t border-slate-100">
+                <span class="text-xs text-slate-400 font-medium"><i class="fa-regular fa-calendar mr-1"></i> ${this.formatDate(lesson.created_at)}</span>
+                <span class="text-sm font-semibold text-brand-600 group-hover:text-brand-700">Vào học ngay <i class="fa-solid fa-arrow-right ml-1 text-xs"></i></span>
+              </div>
+            `;
+            grid.appendChild(card);
+          });
+        }
+      },
+
+      filterLessons() {
+        const queryText = document.getElementById("search-input").value;
+        this.renderGuestList(queryText);
+      },
+
+      openLesson(id) {
+        const lesson = this.state.lessons.find((l) => l.id === id);
+        if (!lesson) return;
+
+        document.getElementById("play-title").innerText = lesson.title;
+        const iframe = document.getElementById("play-iframe");
+        iframe.srcdoc = lesson.source_code || "";
+        this.switchView("guest-play");
+      },
+
+      closeLesson() {
+        document.getElementById("play-iframe").srcdoc = "";
+        this.switchView("guest-list");
+      },
+
+      renderAdminDashboard() {
+        const tbody = document.getElementById("admin-table-body");
+        const emptyState = document.getElementById("empty-state-admin");
+
+        tbody.innerHTML = "";
+
+        const sortedLessons = [...this.state.lessons].sort(
+          (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        );
+
+        if (sortedLessons.length === 0) {
+          emptyState.classList.remove("hidden");
+        } else {
+          emptyState.classList.add("hidden");
+
+          sortedLessons.forEach((lesson) => {
+            const tr = document.createElement("tr");
+            tr.className = "hover:bg-slate-50 transition-colors";
+            tr.innerHTML = `
+              <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-slate-900 sm:pl-6">
+                <div class="flex items-center">
+                  <div class="h-8 w-8 flex-shrink-0 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 mr-3">
+                    <i class="fa-solid fa-file-code"></i>
+                  </div>
+                  <span class="truncate max-w-[200px] sm:max-w-xs md:max-w-md">${lesson.title}</span>
+                </div>
+              </td>
+              <td class="whitespace-nowrap px-3 py-4 text-sm text-slate-500">${this.formatDate(lesson.created_at)}</td>
+              <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                <div class="flex justify-end gap-2">
+                  <button onclick="app.openForm('${lesson.id}')" class="text-slate-400 hover:text-brand-600 bg-slate-100 hover:bg-brand-50 w-8 h-8 rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button onclick="app.deleteLesson('${lesson.id}')" class="text-slate-400 hover:text-red-600 bg-slate-100 hover:bg-red-50 w-8 h-8 rounded-lg flex items-center justify-center">
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+      },
+
+      openForm(id = null) {
+        this.state.editingId = id;
+        const titleInput = document.getElementById("lesson-title");
+        const codeInput = document.getElementById("lesson-code");
+        const formTitle = document.getElementById("form-title");
+
+        if (id) {
+          const lesson = this.state.lessons.find((l) => l.id === id);
+          if (!lesson) return;
+          formTitle.innerText = "Cập nhật bài học";
+          titleInput.value = lesson.title || "";
+          codeInput.value = lesson.source_code || "";
+        } else {
+          formTitle.innerText = "Thêm bài học mới";
+          titleInput.value = "";
+          codeInput.value = "";
+        }
+
+        this.switchView("admin-form");
+      },
+
+      async saveLesson() {
+        const title = document.getElementById("lesson-title").value.trim();
+        const code = document.getElementById("lesson-code").value.trim();
+
+        if (!title || !code) {
+          alert("Vui lòng nhập đầy đủ Tên bài học và Mã nguồn!");
+          return;
+        }
+
+        try {
+          if (this.state.editingId) {
+            await updateDoc(doc(db, "lessons", this.state.editingId), {
+              title,
+              source_code: code,
+            });
+          } else {
+            await addDoc(collection(db, "lessons"), {
+              title,
+              source_code: code,
+              created_at: serverTimestamp(),
+            });
+          }
+
+          await this.loadData();
+          this.switchView("admin-dashboard");
+        } catch (e) {
+          console.error(e);
+          alert("Lưu bài học thất bại. Kiểm tra Firestore Rules.");
+        }
+      },
+
+      async deleteLesson(id) {
+        if (confirm("Bạn có chắc chắn muốn xóa bài học này không? Dữ liệu không thể khôi phục.")) {
+          try {
+            await deleteDoc(doc(db, "lessons", id));
+            await this.loadData();
+            this.renderAdminDashboard();
+          } catch (e) {
+            console.error(e);
+            alert("Xóa bài học thất bại.");
+          }
+        }
+      },
+
+      previewCode() {
+        const code = document.getElementById("lesson-code").value;
+        if (!code.trim()) {
+          alert("Chưa có mã nguồn để xem trước!");
+          return;
+        }
+
+        const modal = document.getElementById("preview-modal");
+        const iframe = document.getElementById("preview-iframe");
+        iframe.srcdoc = code;
+        modal.classList.remove("hidden");
+      },
+
+      closePreview() {
+        const modal = document.getElementById("preview-modal");
+        const iframe = document.getElementById("preview-iframe");
+        iframe.srcdoc = "";
+        modal.classList.add("hidden");
+      },
+
+      renderUI() {
+        this.switchMode("guest");
+      },
+    };
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      window.app = AppLogic;
+      await app.init();
+    });
+  </script>
 </body>
 </html>
