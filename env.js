@@ -1,6 +1,6 @@
 window.__env__ = {
   FIREBASE_API_KEY: "AIzaSyBBaDQzoD1-54gUNlM8sDiYIcSOEYSjTzk",
-  FIREBASE_AUTH_DOMAIN: ""web-hoc-tap-ead82.firebaseapp.com"",
+  FIREBASE_AUTH_DOMAIN: "web-hoc-tap-ead82.firebaseapp.com"",
   FIREBASE_PROJECT_ID: "web-hoc-tap-ead82",
   FIREBASE_STORAGE_BUCKET: "web-hoc-tap-ead82.firebasestorage.app",
   FIREBASE_MESSAGING_SENDER_ID: "1073106603330",
