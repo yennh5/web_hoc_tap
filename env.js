@@ -1,9 +1,9 @@
 window.__env__ = {
-  FIREBASE_API_KEY: "your-firebase-api-key",
-  FIREBASE_AUTH_DOMAIN: "your-project.firebaseapp.com",
-  FIREBASE_PROJECT_ID: "your-project-id",
-  FIREBASE_STORAGE_BUCKET: "your-project.firebasestorage.app",
-  FIREBASE_MESSAGING_SENDER_ID: "your-messaging-sender-id",
-  FIREBASE_APP_ID: "your-app-id",
-  FIREBASE_MEASUREMENT_ID: "your-measurement-id",
+  FIREBASE_API_KEY: "AIzaSyBBaDQzoD1-54gUNlM8sDiYIcSOEYSjTzk",
+  FIREBASE_AUTH_DOMAIN: ""web-hoc-tap-ead82.firebaseapp.com"",
+  FIREBASE_PROJECT_ID: "web-hoc-tap-ead82",
+  FIREBASE_STORAGE_BUCKET: "web-hoc-tap-ead82.firebasestorage.app",
+  FIREBASE_MESSAGING_SENDER_ID: "1073106603330",
+  FIREBASE_APP_ID: "1:1073106603330:web:06dc542ec0e89f627a8cdb",
+  FIREBASE_MEASUREMENT_ID: "G-B2PP67GMJX",
 };
