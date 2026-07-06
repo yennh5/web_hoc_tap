@@ -307,27 +307,75 @@
       serverTimestamp,
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyBBaDQzoD1-54gUNlM8sDiYIcSOEYSjTzk",
-      authDomain: "web-hoc-tap-ead82.firebaseapp.com",
-      projectId: "web-hoc-tap-ead82",
-      storageBucket: "web-hoc-tap-ead82.firebasestorage.app",
-      messagingSenderId: "1073106603330",
-      appId: "1:1073106603330:web:06dc542ec0e89f627a8cdb",
-      measurementId: "G-B2PP67GMJX",
+    const FIREBASE_ENV_MAP = {
+      apiKey: "FIREBASE_API_KEY",
+      authDomain: "FIREBASE_AUTH_DOMAIN",
+      projectId: "FIREBASE_PROJECT_ID",
+      storageBucket: "FIREBASE_STORAGE_BUCKET",
+      messagingSenderId: "FIREBASE_MESSAGING_SENDER_ID",
+      appId: "FIREBASE_APP_ID",
+      measurementId: "FIREBASE_MEASUREMENT_ID",
     };
 
-    const firebaseApp = initializeApp(firebaseConfig);
-
-    try {
-      if (typeof window !== "undefined") {
-        getAnalytics(firebaseApp);
+    async function loadRuntimeEnv() {
+      if (typeof window !== "undefined" && window.__env__) {
+        return window.__env__;
       }
-    } catch (err) {
-      console.warn("Analytics init skipped:", err);
+
+      try {
+        const envModule = await import("./env.js");
+        if (typeof window !== "undefined" && window.__env__) {
+          return window.__env__;
+        }
+
+        return envModule.default || envModule;
+      } catch (err) {
+        console.warn("Runtime env not loaded:", err);
+        return {};
+      }
     }
 
-    const db = getFirestore(firebaseApp);
+    function resolveFirebaseConfig(runtimeEnv) {
+      if (runtimeEnv?.firebaseConfig) {
+        return runtimeEnv.firebaseConfig;
+      }
+
+      return Object.fromEntries(
+        Object.entries(FIREBASE_ENV_MAP).map(([configKey, envKey]) => [configKey, runtimeEnv?.[envKey] || ""])
+      );
+    }
+
+    function validateFirebaseConfig(firebaseConfig) {
+      const missingKeys = Object.keys(FIREBASE_ENV_MAP).filter((key) => !firebaseConfig[key]);
+
+      if (missingKeys.length > 0) {
+        throw new Error(`Thiếu cấu hình Firebase: ${missingKeys.join(", ")}`);
+      }
+
+      return firebaseConfig;
+    }
+
+    let db;
+
+    try {
+      const runtimeEnv = await loadRuntimeEnv();
+      const firebaseConfig = validateFirebaseConfig(resolveFirebaseConfig(runtimeEnv));
+      const firebaseApp = initializeApp(firebaseConfig);
+
+      try {
+        if (typeof window !== "undefined") {
+          getAnalytics(firebaseApp);
+        }
+      } catch (err) {
+        console.warn("Analytics init skipped:", err);
+      }
+
+      db = getFirestore(firebaseApp);
+    } catch (err) {
+      console.error("Firebase bootstrap failed:", err);
+      alert("Thiếu cấu hình Firebase runtime. Hãy sao chép env.example.js thành env.js và điền đầy đủ FIREBASE_*.");
+      throw err;
+    }
 
     const KANJI_GAME_MOCK_CODE = `<!DOCTYPE html>
 <html lang="vi">
